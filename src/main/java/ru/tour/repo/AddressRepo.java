@@ -8,4 +8,6 @@ public interface AddressRepo extends JpaRepository<Address, String> {
 
     Address findByName(String name);
     Address findActionByTours(Tours tours);
+    Address findActionByToursId(String id);
+
 }

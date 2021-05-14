@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class TourDto {
     private String address;
+    private String id;
     private String city;
     private String country;
     private String name;
@@ -21,6 +22,14 @@ public class TourDto {
     private int childrenMax;
     private int childrenMin;
     private int howManyNights;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAddress() {
         return address;

@@ -18,4 +18,6 @@ public interface CountryRepo extends JpaRepository<Country, String> {
 
     Set<Country> findByNameAndCitiesName(String name, String cities_name);
 
+
+    Country findByCitiesId(String cities_id);
 }

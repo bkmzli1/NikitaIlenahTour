@@ -8,5 +8,5 @@ public interface CityRepo extends JpaRepository<City, String> {
 
     City findByName(String name);
     City findActionByAddressesTours(Tours tours);
-
+    City findByAddressesId(String addresses_id);
 }

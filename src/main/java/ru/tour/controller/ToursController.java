@@ -339,11 +339,65 @@ public class ToursController {
     public Object getSvaze() {
         return svaziRepo.findAll();
     }
+
     @GetMapping(value = "/svaze/{id}")
     @ResponseBody
     @JsonView(Views.Tyr.class)
     public Object getSvaze(@PathVariable String id) {
         return toursRepo.findBySvazisId(id);
+    }
+
+    @GetMapping(value = "/all")
+    @ResponseBody
+    public Object getall() {
+        List<Country> all = countryRepo.findAll();
+        return all;
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    @ResponseBody
+    public Object getdelite(@PathVariable String id) {
+        Address actionByToursId = addressRepo.findActionByToursId(id);
+        actionByToursId.getTours().stream().filter(tours -> tours.getId().equals(id)).forEach(tours -> actionByToursId.getTours().remove(tours));
+        addressRepo.save(actionByToursId);
+        toursRepo.deleteById(id);
+        return null;
+    }
+
+    @DeleteMapping(value = "/delete/country/{id}")
+    @ResponseBody
+    public Object getdelitecpu(@PathVariable String id) {
+        Country byId = countryRepo.findById(id).get();
+        byId.getCities().forEach(city -> {
+            city.getAddresses().forEach(address -> {
+                address.getTours().clear();
+            });
+            city.getAddresses().clear();
+        });
+        byId.getCities().clear();
+        countryRepo.save(byId);
+        countryRepo.deleteById(id);
+        return null;
+    }
+
+    @DeleteMapping(value = "/delete/addres/{id}")
+    @ResponseBody
+    public Object getdeliteadd(@PathVariable String id) {
+        City byAddressesId = cityRepo.findByAddressesId(id);
+        byAddressesId.getAddresses().stream().filter(address -> address.getId().equals(id)).forEach(address -> byAddressesId.getAddresses().remove(address));
+        cityRepo.save(byAddressesId);
+        addressRepo.deleteById(id);
+        return null;
+    }
+
+    @DeleteMapping(value = "/delete/city/{id}")
+    @ResponseBody
+    public Object getdelitecity(@PathVariable String id) {
+        Country byCitiesId = countryRepo.findByCitiesId(id);
+        byCitiesId.getCities().stream().filter(city -> city.getId().equals(id)).forEach(city -> byCitiesId.getCities().remove(city));
+        countryRepo.save(byCitiesId);
+        cityRepo.deleteById(id);
+        return null;
     }
 
     @PutMapping(value = "/get/{id}")

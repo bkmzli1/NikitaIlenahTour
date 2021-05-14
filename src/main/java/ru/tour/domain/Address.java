@@ -19,7 +19,7 @@ public class Address {
     private String id;
     @JsonView(Views.City.class)
     private String name;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Tours> tours;
 
     public String getId() {

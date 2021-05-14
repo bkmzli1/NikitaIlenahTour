@@ -17,4 +17,6 @@ public interface ToursRepo extends JpaRepository<Tours, String> {
     Set<Tours> findByDataStartAfter(LocalDate dataStart);
     Tours findBySvazisId(String svazis_id);
     Tours findByIdGen(String idGen);
+
+    Tours findActionBySvazisId(String svazis_id);
 }

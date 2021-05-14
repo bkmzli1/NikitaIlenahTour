@@ -337,7 +337,8 @@ public class ToursController {
     @ResponseBody
     @JsonView(Views.Tyr.class)
     public Object getSvaze() {
-        return svaziRepo.findAll();
+        List<Svazi> all = svaziRepo.findAll();
+        return all;
     }
 
     @GetMapping(value = "/svaze/{id}")
@@ -414,5 +415,15 @@ public class ToursController {
         }
         toursRepo.save(tours);
         return toursRepo.findById(id);
+    }
+
+    @DeleteMapping(value = "/get/{id}/{idSvazi}")
+    @ResponseBody
+    public Object putTourdel(@PathVariable String id, @PathVariable String idSvazi) {
+        List<Tours> all = toursRepo.findAll();
+        all.forEach(tours ->  tours.getSvazis().removeIf(svazi -> svazi.getId().equals(idSvazi)));
+        toursRepo.saveAll(all);
+        svaziRepo.deleteById(idSvazi);
+        return null;
     }
 }

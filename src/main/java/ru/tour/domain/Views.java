@@ -8,7 +8,7 @@ public final class Views {
     public interface Country extends BasicCountry {}
     public interface BasicCity extends  Country{}
     public interface City extends  BasicCity{}
-    public interface Tyr {};
+    public interface Tyr extends Id {};
 
 
 }

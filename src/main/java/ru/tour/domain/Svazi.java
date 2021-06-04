@@ -28,6 +28,8 @@ public class Svazi {
     private String surname;
     @JsonView(Views.Tyr.class)
     private String name;
+    @JsonView(Views.Tyr.class)
+    private String text;
 
     public String getId() {
         return id;
@@ -67,5 +69,13 @@ public class Svazi {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

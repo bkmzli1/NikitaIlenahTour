@@ -7,6 +7,8 @@ public class SvaziDto {
     private String telephone;
     private String surname;
     private String name;
+    private String text;
+
 
 
     public String getIdT() {
@@ -47,5 +49,13 @@ public class SvaziDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

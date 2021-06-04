@@ -299,26 +299,27 @@ public class ToursController {
     @ResponseBody
     public Object search(@RequestBody SearchDto searchDto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.println(formatter.format(searchDto.getDataStrat()));
         Set<Country> countrys = this.countryRepo.findByNameAndCitiesName(searchDto.getCountry(), searchDto.getCity());
         countrys.forEach(country -> country.getCities().stream().filter(Objects::nonNull)
                 .forEach(city -> city.getAddresses().stream().filter(Objects::nonNull)
                         .forEach(address -> {
-                            address.getTours().removeIf(tours -> tours.getDataStart().compareTo(searchDto.dataStrat) < 0);
-                            try {
-                                address.getTours().removeIf(tours -> tours.getDataStop().plusDays(tours.getHowManyNights()).compareTo(searchDto.getDataStop()) >= 0);
-                            } catch (Exception e) {
-                            }
-                            try {
-                                address.getTours().removeIf(tours -> tours.getAdultsMax() <= searchDto.getAdults() & searchDto.getAdults() >= tours.getAdultsMin());
-                            } catch (Exception e) {
+//                            address.getTours().removeIf(tours -> tours.getDataStart().compareTo(searchDto.dataStrat) < 0);
+//                            try {
+//                                address.getTours().removeIf(tours -> tours.getDataStop().plusDays(tours.getHowManyNights()).compareTo(searchDto.getDataStop()) >= 0);
+//                            } catch (Exception e) {
+//                            }
+//                            try {
+//                                address.getTours().removeIf(tours -> searchDto.getAdults() >= tours.getAdultsMin());
+//                            } catch (Exception e) {
+//
+//                            }
+//                            try {
+//                                address.getTours().removeIf(tours ->  searchDto.getChildren() >= tours.getChildrenMin());
+//                            } catch (Exception e) {
+//
+//                            }
 
-                            }
-                            try {
-                                address.getTours().removeIf(tours -> tours.getChildrenMax() <= searchDto.getChildren() & searchDto.getChildren() >= tours.getChildrenMin());
-                            } catch (Exception e) {
-
-                            }
+                            address.getTours().removeIf(tours -> tours.getDataStop().compareTo(searchDto.dataStrat) < 0);
 
                             Set<Tours> toursSort = new TreeSet<Tours>(Comparator.comparing(Tours::getCreates).reversed());
                             toursSort.addAll(address.getTours());

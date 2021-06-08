@@ -14,7 +14,7 @@ import ru.tour.services.impl.UserService;
 
 
 @Component
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin()
 public class InitialDataLoader implements ApplicationRunner {
 
     private final RoleService roleService;

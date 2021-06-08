@@ -5,11 +5,12 @@ import ru.tour.domain.City;
 import ru.tour.domain.Country;
 import ru.tour.domain.Tours;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CountryRepo extends JpaRepository<Country, String> {
 
-    Country findByName(String name);
+    List<Country> findByName(String name);
 
     Country findActionByCities(City city);
 

@@ -85,7 +85,7 @@ public class ToursController {
             strings.put("error", errors);
             return strings;
         } else {
-            Country country = countryRepo.findByName(name);
+            Country country = countryRepo.findByName(name).get(0);
             try {
                 Set<City> cities = country.getCities();
                 City city = cityRepo.findByName(cityDto.getName());
@@ -155,30 +155,34 @@ public class ToursController {
             strings.put("error", errors);
             return strings;
         } else {
-            Country country = countryRepo.findByName(tourDto.getCountry());
+            Country country = countryRepo.findByName(tourDto.getCountry()).get(0);
             Set<City> cities = country.getCities();
             Tours userEntity = this.modelMapper.map(tourDto, Tours.class);
             userEntity.setIdGen(UUID.randomUUID().toString());
             userEntity.setImg(new HashSet<>());
             userEntity.setCreates(LocalDateTime.now());
-            for (String imgId : tourDto.getImg()) {
-                userEntity.getImg().add(imgRepo.getOne(imgId));
-            }
-
-            Set<Img> imgs = new HashSet<>();
             try {
-                tourDto.getSizeServices().forEach(services -> {
-                    services.getImg().forEach(img -> {
-                        if (img.getB() == 1) {
-                            Img imgDB = this.modelMapper.map(img, Img.class);
-                            imgs.add(imgDB);
-                        }
-                    });
-                });
-            } catch (NullPointerException nullPointerException) {
-            }
+                for (String imgId : tourDto.getImg()) {
+                    userEntity.getImg().add(imgRepo.getOne(imgId));
+                }
 
-            userEntity.setServices(imgs);
+                Set<Img> imgs = new HashSet<>();
+                try {
+                    tourDto.getSizeServices().forEach(services -> {
+                        services.getImg().forEach(img -> {
+                            if (img.getB() == 1) {
+                                Img imgDB = this.modelMapper.map(img, Img.class);
+                                imgs.add(imgDB);
+                            }
+                        });
+                    });
+                } catch (NullPointerException nullPointerException) {
+                }
+
+                userEntity.setServices(imgs);
+            } catch (Exception e) {
+            }
+            countryRepo.save(country);
 
             cities.stream().filter(city ->
                     city.getName().equals(tourDto.getCity())).forEach(city ->
@@ -201,7 +205,12 @@ public class ToursController {
             return toursRepo.findByIdGen(userEntity.getIdGen());
         }
     }
-
+    @CrossOrigin()
+    @PostMapping(value = "/edit")
+    public Object edit(@RequestBody Tours tours) {
+        toursRepo.save(tours);
+        return tours;
+    }
     @GetMapping(value = "/top/{size}")
     @ResponseBody
     public Object top(@PathVariable int size) {
@@ -422,7 +431,7 @@ public class ToursController {
     @ResponseBody
     public Object putTourdel(@PathVariable String id, @PathVariable String idSvazi) {
         List<Tours> all = toursRepo.findAll();
-        all.forEach(tours ->  tours.getSvazis().removeIf(svazi -> svazi.getId().equals(idSvazi)));
+        all.forEach(tours -> tours.getSvazis().removeIf(svazi -> svazi.getId().equals(idSvazi)));
         toursRepo.saveAll(all);
         svaziRepo.deleteById(idSvazi);
         return null;

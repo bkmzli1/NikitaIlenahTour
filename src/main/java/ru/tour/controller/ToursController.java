@@ -61,7 +61,7 @@ public class ToursController {
 
     }
 
-    @JsonView(Views.City.class)
+
     @GetMapping(value = "/country")
     @ResponseBody
     public Object getCountries() {

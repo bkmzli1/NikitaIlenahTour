@@ -22,6 +22,7 @@ public class Img {
     private String name;
     private String img;
     private String title;
+    private byte[] bite;
 
 
     public String getId() {
@@ -55,5 +56,13 @@ public class Img {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public byte[] getBite() {
+        return bite;
+    }
+
+    public void setBite(byte[] bite) {
+        this.bite = bite;
     }
 }

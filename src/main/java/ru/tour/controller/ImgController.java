@@ -11,6 +11,9 @@ import ru.tour.repo.ServicesRepo;
 import ru.tour.repo.ToursRepo;
 import ru.tour.services.impl.ImgService;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -102,18 +105,24 @@ public class ImgController {
                 }
                 String uuidFile = UUID.randomUUID().toString();
                 String resultFilename = uuidFile + "." + mf.getOriginalFilename();
-
+                Img imgDB = new Img();
+                try {
+                    imgDB.setBite(mf.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 try {
                     mf.transferTo(new File(uploadPDir + "/" + resultFilename));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                Img imgDB = new Img();
+
                 imgDB.setName(mf.getResource().getFilename());
                 imgDB.setImg("static" + upFile + "/" + resultFilename);
                 images.add(imgDB);
                 imgDB.setTitle(type);
+
                 imgRepo.save(imgDB);
 
             }
@@ -128,4 +137,24 @@ public class ImgController {
         images.forEach(img -> imgIDs.add(img.getId()));
         return imgIDs;
     }
+
+
+
+
+
+
+
+    @RequestMapping(value = "/imageDisplay/{id}", method = RequestMethod.GET)
+    public void showImage(HttpServletResponse response, HttpServletRequest request, @PathVariable String id)
+            throws ServletException, IOException {
+
+
+        Img item = imgRepo.findById(id).get();
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+        response.getOutputStream().write(item.getBite());
+
+
+        response.getOutputStream().close();
+    }
+        
 }

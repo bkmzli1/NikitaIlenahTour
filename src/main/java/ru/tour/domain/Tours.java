@@ -48,7 +48,7 @@ public class Tours {
     private int humanMax;
     private int childrenMin;
     private int childrenMax;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<Img> img;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
